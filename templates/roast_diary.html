@@ -1,0 +1,74 @@
+{% extends "template.html" %}
+{% block body %}
+    <div class='component'>
+        <div class='text' id='timer'>
+            <div class='spacer'></div>
+            <p id='timerLabel' class='data'>00:00</p>
+            <div class='spacer'></div>
+            <p class='label'>Timer</p>
+        </div>
+        <div class='text' id='temperature'>
+            <div class='spacer'>
+                <div id='tempUp' class="arrow up" onclick="logTemperatureChange('temperatureLabel');"></div>
+            </div>
+            <p id='temperatureLabel' class='data'>150&#176;F</p>
+            <div class='spacer'>
+                <div id='tempDown' class="arrow down" onclick="logTemperatureChange('temperatureLabel', -1);"></div>
+            </div>
+            <p class='label'>Temperature</p>
+        </div>
+        <div class='interactive' id='power'>
+            <div class='spacer'>
+                <div class="arrow up" onclick="changeValue('powerLabel');"></div>
+            </div>
+            <p id='powerLabel' class='data'>9</p>
+            <div class='spacer'>
+                <div class="arrow down" onclick="changeValue('powerLabel', -1);"></div>
+            </div>
+            <p class='label'>Power</p>
+        </div>
+        <div class='interactive' id='fan'>
+            <div class='spacer'>
+                <div class="arrow up" onclick="changeValue('fanLabel');"></div>
+            </div>
+            <p id='fanLabel', class='data'>9</p>
+            <div class='spacer'>
+                <div class="arrow down" onclick="changeValue('fanLabel', -1);"></div>
+            </div>
+            <p class='label'>Fan</p>
+        </div>
+        <input type='checkbox' id='firstCrack' onclick='recordCrack(1);'><label for='firstCrack' id='firstCrackLabel'>First Crack</label>
+        <input type='checkbox' id='secondCrack' onclick='recordCrack(2);'><label for='secondCrack' id='secondCrackLabel'>Second Crack</label>
+        <button id='start' type='button' onclick='startRoast();'>Start</button>
+        <p>Temp up/down: Press w/s</p>
+        <p>Power up/down: Press e/d</p>
+        <p>Fan up/down: Press r/f</p>
+    </div>
+    <script>
+        function keyPress() {
+            switch(event.key) {
+                case "w":
+                    logTemperatureChange('temperatureLabel');
+                    break;
+                case "s":
+                    logTemperatureChange('temperatureLabel', -1);
+                    break;
+                case "e":
+                    changeValue('powerLabel');
+                    break;
+                case "d":
+                    changeValue('powerLabel', -1);
+                    break;
+                case "r":
+                    changeValue('fanLabel');
+                    break;
+                case "f":
+                    changeValue('fanLabel', -1);
+                    break;
+                default:
+                    console.log(`Key code: ${event.key} not mapped to activity.`);
+            }
+        }
+        window.addEventListener('keypress', keyPress, false);
+    </script>
+{% endblock %}

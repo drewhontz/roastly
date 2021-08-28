@@ -1,0 +1,9 @@
+{% extends "template.html" %}
+{% block body %}
+<form method="POST" action="/roast/new">
+    {{ form.csrf_token }} <br><br>
+    {{ form.bean_id.label }} {{ form.bean_id }} <br><br>
+    {{ form.starting_weight.label }} {{ form.starting_weight }} <br><br>
+    <input type="submit" value="Start Roast!">
+</form>
+{% endblock %}

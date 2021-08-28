@@ -1,0 +1,32 @@
+{% extends "template.html" %}
+{% block body %}
+<a href="/roast/new"> Start a new roast </a>
+<table class='styled-table'>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Bean</th>
+            <th>Roast Level</th>
+            <th>Duration</th>
+            <th>Starting Weight</th>
+            <th>Ending Weight</th>
+            <th>% Loss</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for roast in roasts %}
+            <tr>
+                <td> <a href="/roast/{{ roast.id }}"> {{ roast.id }} </a></td>
+                <td>{{ roast.bean_name }}</td>
+                <td>{{ roast.roast_level }}</td>
+                <td>{{ (roast.duration / 60)|round(0, 'floor')|int }}:{{ '%02d' % (((roast.duration / 60) - ((roast.duration / 60)|round(0, 'floor')|int)) * 60)|round|int }} </td>
+                <td>{{ roast.starting_weight }}g</td>
+                <td>{{ roast.ending_weight }}g</td>
+                <td>{{ (((roast.ending_weight - roast.starting_weight) / roast.starting_weight) * 100)|round(2) }}%</td>
+                <td> <a href="/roast/delete/{{ roast.id }}"><img src="https://img.icons8.com/material-outlined/24/000000/trash--v1.png"/></a> </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

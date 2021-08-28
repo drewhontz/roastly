@@ -1,0 +1,9 @@
+{% extends "template.html" %}
+{% block body %}
+<form method="POST" action="/roast/finish/{{ roast_id }}">
+    {{ form.csrf_token }} <br><br>
+    {{ form.roast_level.label }} {{ form.roast_level }} <br><br>
+    {{ form.ending_weight.label }} {{ form.ending_weight }} <br><br>
+    <input type="submit" value="Save Roast!">
+</form>
+{% endblock %}

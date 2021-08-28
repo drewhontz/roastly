@@ -1,0 +1,11 @@
+{% extends "template.html" %}
+{% block body %}
+    <body>
+        <form method="POST" action="/bean/new">
+            {{ form.csrf_token }} <br><br>
+            {{ form.bean_name.label }} {{ form.bean_name(size=20) }} <br><br>
+            {{ form.origin_id.label }} {{ form.origin_id }} <br><br>
+            {{ form.processing_method_id.label }} {{ form.processing_method_id }} <br><br>
+            <input type="submit" value="Add bean">
+        </form>
+{% endblock %}
