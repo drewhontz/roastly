@@ -4,49 +4,75 @@
   <canvas id="myChart" width="400px" height="400px"></canvas>
 </div>
 <script>
+    // Grab variables passed from route
     var roast = {{roast | tojson }};
     const labels = roast['labels'];
     const temp = roast['temperature'];
     const power = roast['power'];
     const fan = roast['fan'];
-    console.log(temp);
+
+    // Build chart assets
     var ctxt = document.getElementById('myChart').getContext('2d');
+
+    var tempDataset = {
+        yAxisID: 'yTempAxis',
+        label: 'Temperature',
+        backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: 'rgb(255, 99, 132)',
+        data: temp
+    };
+
+    var powerDataset = {
+        yAxisID: 'ySettingAxis',
+        label: 'Power',
+        backgroundColor: 'rgb(99, 132, 255)',
+        borderColor: 'rgb(99, 132, 255)',
+        data: power
+    };
+
+    var fanDataset = {
+        yAxisID: 'ySettingAxis',
+        label: 'Fan',
+        backgroundColor: 'rgb(132, 255, 99)',
+        borderColor: 'rgb(132, 255, 99)',
+        data: fan
+    };
+
+    var temperatureAxis = {
+        type: "linear",
+        position: "left",
+        min: 150,
+        max: 500
+    };
+
+    var settingsAxis = {
+        id: "B",
+        type: "linear",
+        position: "right",
+        min: 0,
+        max: 9
+    };
+
     const data = {
         labels: labels,
-        datasets: [{
-            yAxisID: 'A',
-            label: 'Temperature',
-            backgroundColor: 'rgb(255, 99, 132)',
-            borderColor: 'rgb(255, 99, 132)',
-            data: temp
-        }, {
-            yAxisID: 'B',
-            label: 'Power',
-            backgroundColor: 'rgb(99, 132, 255)',
-            borderColor: 'rgb(99, 132, 255)',
-            data: power
-        }, {
-            yAxisID: 'B',
-            label: 'Fan',
-            backgroundColor: 'rgb(132, 255, 99)',
-            borderColor: 'rgb(132, 255, 99)',
-            data: fan
-        },
-        ]
+        datasets: [tempDataset, powerDataset, fanDataset]
     };
+
     const config = {
         type: 'line',
         data: data,
         options: {
             scales: {
-                yAxes: [{id: "A", type: "linear", position: "left", ticks:{ min: 0, max: 480}}, {id: "B", type: "linear", position: "right", ticks:{ min: 0, max: 9}}]
+                yTempAxis: temperatureAxis, 
+            ySettingAxis: settingsAxis
             }
         }
     };
-  var myChart = new Chart(
-    ctxt,
-    config
-  );
+
+    var myChart = new Chart(
+        ctxt,
+        config
+    );
 </script>
 
 {% endblock %}

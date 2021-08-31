@@ -5,6 +5,7 @@
     <thead>
         <tr>
             <th>Id</th>
+            <th>Roast Date</th>
             <th>Bean</th>
             <th>Roast Level</th>
             <th>Duration</th>
@@ -18,6 +19,7 @@
         {% for roast in roasts %}
             <tr>
                 <td> <a href="/roast/{{ roast.id }}"> {{ roast.id }} </a></td>
+                <td>{{ roast.created_at }}</td>
                 <td>{{ roast.bean_name }}</td>
                 <td>{{ roast.roast_level }}</td>
                 <td>{{ (roast.duration / 60)|round(0, 'floor')|int }}:{{ '%02d' % (((roast.duration / 60) - ((roast.duration / 60)|round(0, 'floor')|int)) * 60)|round|int }} </td>

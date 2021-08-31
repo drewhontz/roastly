@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect
 from flask_wtf import FlaskForm
+from sqlalchemy.sql.functions import current_timestamp
 from wtforms import StringField, RadioField, SelectField, IntegerField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from flask_sqlalchemy import SQLAlchemy
@@ -7,14 +8,28 @@ from flask_migrate import Migrate
 from sqlalchemy import func
 from datetime import datetime
 import os
+import math
+
+# TODO:
+## Write migration to store elapsed time as int
+## Write migration to store temperature as int
+## Allow settings for temp as celsius
+## convenience function for elapsed time int to label
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:\\Users\\athon\\Documents\\roastly\\roastly.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 SECRET_KEY = os.urandom(32)
 app.config['SECRET_KEY'] = SECRET_KEY
+app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+
+def convert_elapsed_time(elapsed_time):
+    minute, second = elapsed_time.split(":")
+    minute = int(minute)
+    second = int(second)
+    return (minute * 60) + second
 
 # MODELS
 class User(db.Model):
@@ -99,15 +114,18 @@ def bean():
     beans = Bean.query\
             .join(Origin)\
             .join(ProcessingMethod)\
-            .add_columns(
+            .join(Roast)\
+            .filter(Roast.ending_weight > -1)\
+            .with_entities(
                 Bean.id,
                 Bean.name,
                 Origin.name.label('origin'),
                 ProcessingMethod.name.label('method'),
-                func.count().label('count_roasts')
+                func.count(Bean.name).label('count_roasts')
             )\
             .group_by(Bean.id)\
             .all()
+    
     return render_template("bean.html", beans=beans)
 
 @app.route("/bean/new/", methods=['GET', 'POST'])
@@ -143,7 +161,7 @@ def roast():
         .join(Bean)\
         .join(RoastLevel)\
         .add_columns(
-            Roast.id, Bean.name.label('bean_name'),
+            Roast.id, Roast.created_at, Bean.name.label('bean_name'),
             RoastLevel.name.label("roast_level"), Roast.duration,
             Roast.starting_weight, Roast.ending_weight).all()
 
@@ -178,14 +196,35 @@ def roast_diary(roast_id):
 
 @app.route("/roast/<roast_id>", methods=['GET'])
 def get_roast(roast_id):
-    results = RoastEvent.query.filter_by(roast_id=roast_id).all()
-    roast_events = {"labels": [], "temperature": [], "power": [], "fan": []}
-    for res in results:
-        roast_events['labels'].append(res.elapsed_time)
-        temp = res.temperature[:-2]
-        roast_events['temperature'].append(temp)
-        roast_events['power'].append(res.power)
-        roast_events['fan'].append(res.fan)
+    events = RoastEvent.query.filter_by(roast_id=roast_id).order_by(RoastEvent.elapsed_time).all()
+    max_time = convert_elapsed_time(events[-1].elapsed_time)
+    labels = []
+    for second in range(max_time + 1):
+        minutes = math.floor(second / 60)
+        seconds = second % 60
+        second_formatted = f"{minutes}:{seconds}"
+        labels.append(second_formatted)
+    roast_events = {
+        "labels": labels,
+        "temperature": [],
+        "power": [],
+        "fan": []
+    }
+    last_timestamp = 0
+    for event in events:
+        ts = convert_elapsed_time(event.elapsed_time)
+        if ts == last_timestamp and len(roast_events['temperature']) != 0:
+            roast_events['temperature'].pop()
+            roast_events['power'].pop()
+            roast_events['fan'].pop()
+        else:
+            diff = ts - last_timestamp
+            for x in range(diff):
+                roast_events['temperature'].append(event.temperature[:-2])
+                roast_events['power'].append(event.power)
+                roast_events['fan'].append(event.fan)
+        last_timestamp = ts
+
     return render_template(f"roast_stats.html", roast=roast_events)
 
 @app.route("/roast/finish/<roast_id>", methods=['GET', 'POST'])
@@ -228,4 +267,5 @@ def log_event():
     db.session.commit()
     return request.args
 
-app.run(debug=True, use_reloader=True)
+if __name__ == "__main__":
+    app.run(debug=True, use_reloader=True)
