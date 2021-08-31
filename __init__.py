@@ -11,7 +11,7 @@ import os
 import math
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:\\Users\\athon\\Documents\\roastly\\roastly.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///roastly.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 SECRET_KEY = os.urandom(32)
 app.config['SECRET_KEY'] = SECRET_KEY
