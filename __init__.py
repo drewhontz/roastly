@@ -10,12 +10,6 @@ from datetime import datetime
 import os
 import math
 
-# TODO:
-## Write migration to store elapsed time as int
-## Write migration to store temperature as int
-## Allow settings for temp as celsius
-## convenience function for elapsed time int to label
-
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:\\Users\\athon\\Documents\\roastly\\roastly.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

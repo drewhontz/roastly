@@ -8,6 +8,10 @@ The roast page should mirror the interface on the roaster, the user should adjus
 
 ## To Do
 
+- DB Changes:
+    - elapsed time to int
+    - temperature to int
+    - settings to include F | Cd
 - Add shades | images of roasts to the `end_roast` template to help the user determine which level they just roasted
 - Nav bar improvements
     - Increase the size of the text in the navbar
@@ -30,5 +34,8 @@ The roast page should mirror the interface on the roaster, the user should adjus
     - Did the cracks happen around the same time frame?
     - When was the first adjustment made?
     - When did the temperature start to level off?
+- Client refactor
+    - use an interface objects that contain each of our components
+    - clicking a button calls the interface to delagate to that component
 - Hosting
 - Generate shareable link / QR code to roast
