@@ -25,6 +25,11 @@ def convert_elapsed_time(elapsed_time):
     second = int(second)
     return (minute * 60) + second
 
+def convert_seconds(seconds):
+    minutes = math.floor(seconds / 60)
+    seconds = seconds % 60
+    return f"{minutes}:{seconds}"
+
 # MODELS
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -194,10 +199,8 @@ def get_roast(roast_id):
     max_time = convert_elapsed_time(events[-1].elapsed_time)
     labels = []
     for second in range(max_time + 1):
-        minutes = math.floor(second / 60)
-        seconds = second % 60
-        second_formatted = f"{minutes}:{seconds}"
-        labels.append(second_formatted)
+        elapsed_time = convert_seconds(second)
+        labels.append(elapsed_time)
     roast_events = {
         "labels": labels,
         "temperature": [],
