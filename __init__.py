@@ -15,7 +15,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///roastly.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 SECRET_KEY = os.urandom(32)
 app.config['SECRET_KEY'] = SECRET_KEY
-app.config['SQLALCHEMY_ECHO'] = True
+# app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
@@ -61,6 +61,7 @@ class RoastLevel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     ordering = db.Column(db.Integer, nullable=False)
     name = db.Column(db.String(80), unique=True, nullable=False)
+    description = db.Column(db.String(256), unique=True, nullable=False)
 
     def __str__(self):
         return self.name
@@ -100,7 +101,11 @@ class StartRoastForm(FlaskForm):
     starting_weight = IntegerField("Starting Weight (g):", default=140)
 
 class EndRoastForm(FlaskForm):
-    roast_level = QuerySelectField(query_factory=lambda: RoastLevel.query)
+    choices = []
+    for choice in RoastLevel.query.add_columns(RoastLevel.id, RoastLevel.name, RoastLevel.description).all():
+        text = f"{choice.name} - {choice.description}"
+        choices.append((choice.id, text))
+    roast_level = RadioField('Roast Level:', choices=choices)
     ending_weight = IntegerField("Ending Weight (g):", default=120)
 
 # ROUTES
