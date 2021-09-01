@@ -113,14 +113,13 @@ def bean():
     beans = Bean.query\
             .join(Origin)\
             .join(ProcessingMethod)\
-            .join(Roast)\
-            .filter(Roast.ending_weight > -1)\
+            .join(Roast, isouter=True)\
             .with_entities(
                 Bean.id,
                 Bean.name,
                 Origin.name.label('origin'),
                 ProcessingMethod.name.label('method'),
-                func.count(Bean.name).label('count_roasts')
+                func.count(Roast.bean_id).label('count_roasts')
             )\
             .group_by(Bean.id)\
             .all()
@@ -144,7 +143,7 @@ def new_bean():
         )
         db.session.add(bean)
         db.session.commit()
-        return render_template("home.html")
+        return redirect("/bean")
 
 @app.route("/bean/delete/<bean_id>", methods=['GET'])
 def delete_bean(bean_id):
@@ -158,7 +157,7 @@ def delete_bean(bean_id):
 def roast():
     roasts = Roast.query\
         .join(Bean)\
-        .join(RoastLevel)\
+        .join(RoastLevel, isouter=True)\
         .add_columns(
             Roast.id, Roast.created_at, Bean.name.label('bean_name'),
             RoastLevel.name.label("roast_level"), Roast.duration,
