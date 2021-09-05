@@ -1,4 +1,7 @@
 {% extends "template.html" %}
+{% block title%}
+Start a new roast
+{% endblock %}
 {% block body %}
 <form method="POST" action="/roast/new">
     {{ form.csrf_token }} <br><br>

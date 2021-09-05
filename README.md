@@ -8,13 +8,7 @@ The roast page should mirror the interface on the roaster, the user should adjus
 
 ## To Do
 
-- Nav bar improvements
-    - Increase the size of the text in the navbar
-    - Right align the buttons in nav bar
-    - Change font on buttons
 - Template improvements
-    - move icon credit text to actual page footer
-    - look at other websites and decide how to align the body content
     - add images to the actions 'add a new bean' 'start a new roast'
 - Settings page
     - create a settings page which allows you to set default values for the temperature, fan, and power

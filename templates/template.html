@@ -6,15 +6,22 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
     <header>
-        <nav>
-            <a> Roastly </a>
-            <a href="/">Home</a>
-            <a href="/bean"><img width="25px" height="25px" src="{{url_for('static', filename='coffee-bag.png')}}"> Beans </a>
-            <a href="/roast"><img width="25px" height="25px" src="{{url_for('static', filename='beans.png')}}"> Roasts </a>
-            <a href="/settings"> Settings </a>
-        </nav>
+        <h1> Roastly </h1>
+        <h2> Fresh Roast Roast Logs </h2>
     </header>
-    {% block body %} {% endblock %}
+    <div class='topnav'>
+        <a href="/">Home</a>
+        <a href="/bean">Beans</a>
+        <a href="/roast">Roasts</a>
+        <a href="/settings" style="float:right"> Settings </a>
+    </div>
+    <div class="row">
+    <div class="column side"><br></div>
+    <div class="column middle">
+        <h1> {% block title %} {% endblock %} </h1>
+        {% block body %} {% endblock %}
+    </div>
+    </div>
     <footer>
         <div>Icons made by <a href="https://www.flaticon.com/authors/photo3idea-studio" title="photo3idea_studio">photo3idea_studio</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
     </footer>

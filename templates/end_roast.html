@@ -1,4 +1,7 @@
 {% extends "template.html" %}
+{% block title%}
+Finish your roast
+{% endblock %}
 {% block body %}
 <form method="POST" action="/roast/finish/{{ roast_id }}">
     {{ form.csrf_token }} <br><br>

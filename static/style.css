@@ -65,26 +65,56 @@
 }
 
 header {
-    margin: 0;
-    padding: 0;
-    display: inline-block;
-    background-color: #009879;
-    width: 100%;
-}
-
-nav a {
-    width: 60px;
-    text-decoration: none;
-    padding-right: 10px;
+    background-color: #8c8c8c;
+    text-align: center;
+    padding: 20px;
     color: white;
+  }
+
+  .topnav {
+    overflow: hidden;
+    background-color: #8c8c8c;
+  }
+  
+  /* Style the topnav links */
+  .topnav a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+  
+  /* Change color on hover */
+  .topnav a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+
+.column {
+    float: left;
+    min-height: 800px;
 }
 
-nav a:hover {
-    background-color: teal;
+.column.side {
+    width: 15%;
 }
 
-nav a:active {
-    background-color: #009879;
+.column.middle {
+    width: 85%;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+footer {
+    background-color: #8c8c8c;
+    text-align: center;
+    padding: 10px;
 }
 
 .styled-table {
@@ -97,7 +127,7 @@ nav a:active {
 }
 
 .styled-table thead tr {
-    background-color: #009879;
+    background-color: #8f8f8f;
     color: #ffffff;
     text-align: left;
 }
@@ -116,10 +146,10 @@ nav a:active {
 }
 
 .styled-table tbody tr:last-of-type {
-    border-bottom: 2px solid #009879;
+    border-bottom: 2px solid rgb(90,44,36);
 }
 
 .styled-table tbody tr.active-row {
     font-weight: bold;
-    color: #009879;
+    color: rgb(90,44,36);
 }
